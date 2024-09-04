@@ -18,7 +18,6 @@ pipeline {
         stage("Checkout Test Project") {
             steps {
                 sh "mkdir -p Test-Project"
-                sh" Test Error"
                 dir("Test-Project") {
                     git credentialsId: "${GIT_CREDENTIALS_JENKINS}",
                         branch: "${GIT_BRANCH}",
