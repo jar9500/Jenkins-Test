@@ -21,7 +21,7 @@ pipeline {
                 dir("Test-Project") {
                     git credentialsId: "${GIT_CREDENTIALS_JENKINS}",
                         branch: "${GIT_BRANCH}",
-                            url: "${GIT_URL_DEV}"
+                            url: "${GIT_URL}"
                 }
             }
         }
