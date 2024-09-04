@@ -60,11 +60,11 @@ pipeline {
         }
     }
 
-    /*post {
+    post {
         always {
             emailext to: "${BUILD_USER_EMAIL},${EMAIL_TO}",
             subject: "Build:${currentBuild.currentResult}: ${env.JOB_NAME}",
             body: "${currentBuild.currentResult}: Job ${env.JOB_NAME}\nMore Info can be found here: ${env.BUILD_URL}"
         }
-    }*/
+    }
 }
