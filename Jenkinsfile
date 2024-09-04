@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     parameters {
-        choice(name: 'FORCE_INSTALL', choices: ['No', 'Yes'], description: 'Do you need to install composer dependencies?')
-        choice(name: 'FORCE_AUTOLOAD', choices: ['No', 'Yes'], description: 'Do you need to run composer dump-autoload?')
+        choice(name: 'FORCE_INSTALL', choices: ['No', 'Yes'], description: 'Do you need to install?')
+        choice(name: 'FORCE_AUTOLOAD', choices: ['No', 'Yes'], description: 'Do you need to run autoload?')
     }
 
     environment {
@@ -18,6 +18,7 @@ pipeline {
         stage("Checkout Test Project") {
             steps {
                 sh "mkdir -p Test-Project"
+                sh" Test Error"
                 dir("Test-Project") {
                     git credentialsId: "${GIT_CREDENTIALS_JENKINS}",
                         branch: "${GIT_BRANCH}",
@@ -63,7 +64,7 @@ pipeline {
     post {
         always {
             emailext to: "${EMAIL_TO}",
-            subject: "Build:${currentBuild.currentResult}: ${env.JOB_NAME}",
+            subject: "Build: - ${currentBuild.currentResult}: ${env.JOB_NAME}",
             body: "${currentBuild.currentResult}: Job ${env.JOB_NAME}\nMore Info can be found here: ${env.BUILD_URL}"
         }
     }
