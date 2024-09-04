@@ -2,24 +2,23 @@ pipeline {
     agent any
 
     parameters {
-        choice(name: 'FORCE_INSTALL_COMPOSER', choices: ['No', 'Yes'], description: 'Do you need to install composer dependencies?')
-        choice(name: 'FORCE_COMPOSER_DUMP_AUTOLOAD', choices: ['No', 'Yes'], description: 'Do you need to run composer dump-autoload?')
+        choice(name: 'FORCE_INSTALL', choices: ['No', 'Yes'], description: 'Do you need to install composer dependencies?')
+        choice(name: 'FORCE_AUTOLOAD', choices: ['No', 'Yes'], description: 'Do you need to run composer dump-autoload?')
     }
 
     environment {
-        GIT_CREDENTIALS_JENKINS = "jenkins-server-sapi"
-        GIT_URL_DEV         = "git@github.com:sqiva-sistem/sa-frontend.git"
-        GIT_URL_DEV_BUILD   = "git@github.com:sqiva-sistem/sa-frontend-build.git"
+        GIT_URL             = "https://github.com/jar9500/Final-Project-TSA-NP.git"
         GIT_BRANCH          = "master"
+        GIT_CREDENTIALS_JENKINS = "Ubuntu-Server"
         EMAIL_TO            = "jadid.ramadhan@sqiva.com"
     }
 
     // checkout from sa-frontend repo branch dev
     stages {
-        stage("Checkout sa-frontend branch dev") {
+        stage("Checkout Test Project") {
             steps {
-                sh "mkdir -p sa-frontend-dev"
-                dir("sa-frontend-dev") {
+                sh "mkdir -p Test-Project"
+                dir("Test-Project") {
                     git credentialsId: "${GIT_CREDENTIALS_JENKINS}",
                         branch: "${GIT_BRANCH}",
                             url: "${GIT_URL_DEV}"
@@ -27,88 +26,36 @@ pipeline {
             }
         }
 
-        stage("Install Composer Dependencies") {
+        stage("Install Test-Project") {
             steps {
-                dir("sa-frontend-dev") {
+                dir("Test-Project") {
                     script {
                         // check install composer or not
-                        if (params.FORCE_INSTALL_COMPOSER == 'Yes') {
-                            echo "user choose to install composer, installing composer base on composer.json"
+                        if (params.FORCE_INSTALL == 'Yes') {
+                            echo "user choose to install , installing..."
 
                             //sh 'composer install --ignore-platform-reqs --no-dev'
                         } else {
-                            echo "user choose to skip composer install."
+                            echo "user choose to skip install."
                         }
 
                         // run composer dump-autoload or not
-                        if (params.FORCE_COMPOSER_DUMP_AUTOLOAD == 'Yes') {
-                            echo "user choose to run composer dump-autoload, running base on composer.json"
+                        if (params.FORCE_AUTOLOAD == 'Yes') {
+                            echo "user choose to run autoload"
                             
                             // prevent double run composer install
-                            if (params.FORCE_INSTALL_COMPOSER == "No") {
+                            if (params.FORCE_INSTALL == "No") {
                                 //sh 'composer install --ignore-platform-reqs --no-dev'
                             }
 
                             //sh 'composer dump-autoload'
                         } else {
-                            echo "user choose to skip run composer dump-autoload"
+                            echo "user choose to skip run autoload"
                         }
 
                         //sh "rm -rf .git"
                     }
                 }
-            }
-        }
-
-        stage("Checkout sa-frontend build branch dev") {
-            steps {
-                sh 'mkdir -p sa-frontend-dev-build'
-                /*dir("sa-frontend-dev-build") {
-                    git credentialsId: "${GIT_CREDENTIALS_JENKINS}",
-                        branch: "${GIT_BRANCH}",
-                            url: "${GIT_URL_DEV_BUILD}"
-
-                }*/
-            }
-        }
-
-        stage("Prepare and Push build to sa-frontend-build branch dev") {
-            steps {
-                /*dir("sa-frontend-dev-build") {
-                    script {
-                        // sh "git checkout -f ${GIT_BRANCH}"
-
-                        // copy all build deploy to build dev folder
-                        sh "yes | sudo cp -R -p ../sa-frontend-dev/* ."
-                        
-                        // copy .gitignore .env to build folder
-                        // sh "yes | cp -p ../sa-frontend-dev-env/dev/.gitignore ."
-                        sh "yes | cp -p ../sa-frontend-env/dev/.env ."
-
-                        gitStatus = sh(returnStdout: true, script: 'git status --porcelain')
-                        
-                        if (gitStatus.trim().isEmpty()) {
-                            echo 'No new changes detected.'
-                        } else {
-                            sh "git status"
-                            sh 'git add .'
-                            sh "git commit -m 'update dev to latest change by ${BUILD_USER}'"
-                            sh "git push origin ${GIT_BRANCH}"
-                        }
-                    }
-                }*/
-            }
-        }
-
-        stage("sync to dev server") {
-            steps {
-                // rsync into dev server
-                /*
-                sh "sudo chown dockernet:sqiva -R /var/lib/jenkins/workspace/sa-portal/sa-frontend/deploy-to-dev/sa-frontend-dev-build"
-                sh "sudo chmod 775 -R /var/lib/jenkins/workspace/sa-portal/sa-frontend/deploy-to-dev/sa-frontend-dev-build"
-                sh "sudo chmod +x -R /var/lib/jenkins/workspace/sa-portal/sa-frontend/deploy-to-dev/rsync-script-sa-frontend"
-                sh "sudo /var/lib/jenkins/workspace/sa-portal/sa-frontend/deploy-to-dev/rsync-script-sa-frontend/rsync-launcher-dev"
-                */
             }
         }
     }
