@@ -61,7 +61,8 @@ pipeline {
 
         stage("Move Test Project") {
             steps {
-                sh "yes | cp -R ../test-pipeline-project2 /share/project/Netmiko"
+                sh "mkdir -p /share/project/Netmiko"
+                sh "cp -R ${env.WORKSPACE}/Test-Project/* /share/project/Netmiko"
             }
         }
     }
