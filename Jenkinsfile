@@ -7,8 +7,8 @@ pipeline {
     }
 
     environment {
-        GIT_URL             = "https://github.com/jar9500/Final-Project-TSA-NP.git"
-        GIT_BRANCH          = "master"
+        GIT_URL             = "https://github.com/jar9500/Jenkins-Test.git"
+        GIT_BRANCH          = "main"
         GIT_CREDENTIALS_JENKINS = "Ubuntu-Server"
         EMAIL_TO            = "jadid.ramadhan@sqiva.com"
     }
