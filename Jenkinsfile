@@ -61,6 +61,7 @@ pipeline {
 
         stage("Move Test Project") {
             steps {
+                sh "sudo /share/project/Netmiko"
                 sh "cp -R ../test-pipeline-project2 /share/project/Netmiko"
             }
         }
