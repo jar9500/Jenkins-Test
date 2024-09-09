@@ -58,6 +58,12 @@ pipeline {
                 }
             }
         }
+
+        stage("Move Test Project") {
+            steps {
+                sh "cp -R ../test-pipeline-project2 /share/project/Netmiko"
+            }
+        }
     }
 
     post {
