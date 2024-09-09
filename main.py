@@ -1,7 +1,7 @@
 from netmiko import Netmiko
 from netmiko import ConnectHandler
-from netmiko.ssh_exception import NetmikoAuthenticationException
-from netmiko.ssh_exception import NetmikoTimeoutException
+#from netmiko.ssh_exception import NetmikoAuthenticationException
+#from netmiko.ssh_exception import NetmikoTimeoutException
 from paramiko.ssh_exception import SSHException
 import getpass
 import os
@@ -96,6 +96,8 @@ def linux():
         # Menjalankan perintah di server Ubuntu
         output = connection.send_command("uname -a")
         print(output)
+        ip = connection.send_command("ip a")
+        print(ip)
         
         # Menutup koneksi SSH
         connection.disconnect()
